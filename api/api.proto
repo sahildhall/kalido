@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package api;
+
+/*
+    Networks are collections of users.
+*/
+service NetworkService {
+    // getNetworkMembers returns the members in a network
+    rpc getNetworkMembers(NetworkKey) returns (UserKeys){};
+}
+
+/*
+ Contacts are people you know, here identified by name (a string)
+*/
+service ContactService {
+    // getCommonContacts returns the contacts two users have in common
+    rpc getCommonContacts(TwoUserKeys) returns (Contacts){};
+}
+
+/*
+ Interests are topics users care about
+*/
+service InterestsService {
+    // getSharedInterests returns the topics both users share interest in
+    rpc getSharedInterests(TwoUserKeys) returns (Interests){};
+}
+
+service UserService {
+    // getUser returns the User associated with a key
+    rpc getUser(UserKey) returns (User){};
+}
+
+service ViewNetworkService {
+    // viewNetworkMembers presents a list of network members for display, be enriching the network member list with additional information
+    rpc viewNetworkMembers(UserViewingNetwork) returns (NetworkMembersView){};
+}
+
+message NetworkKey {
+    int64 key = 1;
+}
+
+message UserKey {
+    int64 key = 1;
+}
+
+message User {
+    int64 key = 1;
+    string name = 2;
+}
+
+message UserKeys {
+    repeated UserKey users = 1;
+}
+
+message TwoUserKeys {
+    UserKey user1 = 1;
+    UserKey user2 = 2;
+}
+
+message Contacts {
+    repeated string contacts = 1;
+}
+
+message Interests {
+    repeated string interests = 1;
+}
+
+message UserViewingNetwork {
+    UserKey user = 1;
+    NetworkKey network = 2;
+}
+
+message NetworkMembersView {
+    repeated MemberDetails members = 1;
+}
+
+message MemberDetails {
+    User user = 1;
+    Contacts commonContacts = 2;
+    Interests commonInterests = 3;
+}
