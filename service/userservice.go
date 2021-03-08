@@ -15,12 +15,12 @@ type userData struct {
 // function to initialize the mocked database
 func initMockUserData() []userData {
 	users := []userData{
-		{key: 1, name: "user1"},
-		{key: 2, name: "user2"},
-		{key: 3, name: "user3"},
-		{key: 4, name: "user4"},
-		{key: 5, name: "user5"},
-		{key: 6, name: "user6"},
+		{key: 1, name: "Sahil"},
+		{key: 2, name: "Vijay"},
+		{key: 3, name: "Abhishek"},
+		{key: 4, name: "Jacob"},
+		{key: 5, name: "John"},
+		{key: 6, name: "Pankaj"},
 	}
 
 	return users

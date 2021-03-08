@@ -49,6 +49,70 @@ func TestViewNetworkService(t *testing.T) {
 	}
 }
 
+func TestWithTableViewNetworkService(t *testing.T) {
+	grpcConn, err := grpc.Dial(":3031", grpc.WithInsecure())
+
+	if err != nil {
+		panic(err)
+	}
+	defer grpcConn.Close()
+
+	networkClient := api.NewNetworkServiceClient(grpcConn)
+	userClient := api.NewUserServiceClient(grpcConn)
+	contactClient := api.NewContactServiceClient(grpcConn)
+	interestsClient := api.NewInterestsServiceClient(grpcConn)
+
+	s := endpoint.NewServer(contactClient, interestsClient, userClient, networkClient)
+
+	ctx := context.Background()
+	fmt.Printf("\n\nTable Driven Unit Tests For View Network Service:====\n\n")
+
+	// test table
+	testCases := []struct {
+		userkey    *api.UserKey
+		networkkey *api.NetworkKey
+		err        bool
+	}{
+		{&api.UserKey{Key: 1}, &api.NetworkKey{Key: 100}, false},
+		{&api.UserKey{Key: 2}, &api.NetworkKey{Key: 101}, false},
+		{&api.UserKey{Key: 3}, &api.NetworkKey{Key: 1000}, true},
+		{&api.UserKey{Key: 124}, &api.NetworkKey{Key: 100}, true},
+		{&api.UserKey{Key: 1000}, &api.NetworkKey{Key: 216}, true},
+	}
+
+	testcase := 1
+	totalTestCases := len(testCases)
+
+	for _, tc := range testCases {
+		fmt.Printf("\nTEST CASE : %d of %d \n", testcase, totalTestCases)
+
+		t.Run(fmt.Sprintf("testcase %d of %d", testcase, totalTestCases), func(t *testing.T) {
+			testNetworkPayload := &api.UserViewingNetwork{
+				User:    tc.userkey,
+				Network: tc.networkkey,
+			}
+			result, err := s.ViewNetworkMembers(ctx, testNetworkPayload)
+			if tc.err {
+				if err == nil {
+					t.Logf("ViewNetworkService failed test case : %d\n", testcase)
+					t.Errorf("\nViewNetworkService failed :\n%v\n", err)
+				} else {
+					t.Logf("ViewNetworkService passed test case : %d\n", testcase)
+				}
+			} else {
+				if result != nil {
+					t.Logf("ViewNetworkService passed test case : %d\n", testcase)
+					t.Logf("result : \t%v\n", result)
+				} else {
+					t.Logf("ViewNetworkService failed test case : %d\n", testcase)
+					t.Errorf("\nViewNetworkService failed result is nil\n")
+				}
+			}
+		})
+		testcase += 1
+	}
+}
+
 func TestNetworkService(t *testing.T) {
 	s := service.Service{}
 	ctx := context.Background()

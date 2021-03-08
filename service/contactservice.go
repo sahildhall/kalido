@@ -24,12 +24,12 @@ type user struct {
 // function to initialize the mocked contact database
 func initMockContactsData() []user {
 	users := []user{
-		{key: 1, name: "user1", contacts: []int64{2, 3}},
-		{key: 2, name: "user2", contacts: []int64{1, 3}},
-		{key: 3, name: "user3", contacts: []int64{4, 1}},
-		{key: 4, name: "user4", contacts: []int64{5, 6}},
-		{key: 5, name: "user5", contacts: []int64{6, 1}},
-		{key: 6, name: "user6", contacts: []int64{3, 4}},
+		{key: 1, name: "Sahil", contacts: []int64{2, 3}},
+		{key: 2, name: "Vijay", contacts: []int64{1, 3}},
+		{key: 3, name: "Abhishek", contacts: []int64{4, 1}},
+		{key: 4, name: "Jacob", contacts: []int64{5, 6}},
+		{key: 5, name: "John", contacts: []int64{6, 1}},
+		{key: 6, name: "Pankaj", contacts: []int64{3, 4}},
 	}
 
 	return users
